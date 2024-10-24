@@ -123,15 +123,33 @@ resource "aws_iam_role_policy" "ecs" {
 data "aws_iam_policy_document" "ecs" {
   statement {
     effect    = "Allow"
-    resources = var.allowed_ecs_arns
-    // Permissions to allow creating task definition and update ECS service to use the task definition
+    sid = "RegisterTaskDefinition"
     actions = [
       "ecs:RegisterTaskDefinition",
-      "ecs:UpdateService",
-      "ecs:UpdateServicePrimaryTaskSet",
-      "ecs:DescribeTaskDefinition",
-      "ecs:ListTaskDefinitions"
     ]
+    resources = var.allowed_ecs_arns
+    // Permissions to allow creating task definition and update ECS service to use the task definition
+  }
+
+  statement {
+    effect = "Allow"
+    sid = "DeployService"
+    actions = [
+      "ecs:UpdateService",
+      "ecs:DescribeTaskDefinition",
+      "ecs:DescribeServices"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    sid = "PassRolesInTaskDefinition"
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = ["*"]
   }
 }
 
