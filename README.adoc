@@ -1,0 +1,35 @@
+= OIDC Role for GitHub Actions
+:source-highlighter: rouge
+
+A module to help you configure an OIDC role to use with GitHub Actions. The role allows GitHub actions to perform the following in the same AWS account as the role:
+
+* Read from S3 buckets
+* Write to S3 buckets
+* Publish Docker images to ECR
+* Update ECS services
+
+== Example Usage
+[source,terraform]
+-----
+module "oidc_role" {
+  source = "github.com/nsbno/terraform-aws-github-oidc?ref=x.y.z"
+
+  allowed_s3_read_arns = [
+    data.aws_s3_bucket.my_bucket.arn
+  ]
+
+  allowed_s3_write_arns = [
+    data.aws_s3_bucket.my_other_bucket.arn
+  ]
+
+  allowed_ecr_arns = [
+    data.aws_ecr_repository.my_repo.arn
+  ]
+
+  allowed_ecs_arns = ["*"]
+
+  github_repositories = [
+    "nsbno/terraform-aws-github-oidc"
+  ]
+}
+-----
