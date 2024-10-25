@@ -24,6 +24,8 @@ variable "allowed_ecr_arns" {
 
 variable "allowed_ecs_arns" {
   description = "ECS clusters ARNs the role can update task definitions and services of."
+  default     = ["*"]
+  type        = list(string)
 }
 
 variable "github_repositories" {

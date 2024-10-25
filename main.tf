@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "ecs" {
       "ecs:DescribeServices"
     ]
 
-    resources = ["*"]
+    resources = var.allowed_ecs_arns
   }
 
   statement {
