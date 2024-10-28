@@ -126,6 +126,7 @@ data "aws_iam_policy_document" "ecs" {
     sid = "RegisterTaskDefinition"
     actions = [
       "ecs:RegisterTaskDefinition",
+      "ecs:ListTaskDefinitions"
     ]
     resources = var.allowed_ecs_arns
     // Permissions to allow creating task definition and update ECS service to use the task definition
@@ -137,7 +138,7 @@ data "aws_iam_policy_document" "ecs" {
     actions = [
       "ecs:UpdateService",
       "ecs:DescribeTaskDefinition",
-      "ecs:DescribeServices"
+      "ecs:DescribeServices",
     ]
 
     resources = var.allowed_ecs_arns
