@@ -42,5 +42,5 @@ variable "github_org" {
 
 variable "environment" {
   type        = string
-  description = "The environment to deploy to. Valid values: Test, Service, Stage, Production"
+  description = "The environment to deploy to. Valid values: test, service, stage, prod"
 }
