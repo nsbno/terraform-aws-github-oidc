@@ -7,6 +7,8 @@ terraform {
 }
 
 resource "aws_iam_openid_connect_provider" "this" {
+  count = var.oidc_assume_role_arn != null ? 0 : 1
+
   url = "https://token.actions.githubusercontent.com"
 
   client_id_list = [
@@ -37,7 +39,7 @@ data "aws_iam_policy_document" "assume_role" {
 
     principals {
       type = "Federated"
-      identifiers = [aws_iam_openid_connect_provider.this.arn]
+      identifiers = var.oidc_assume_role_arn != null ? [var.oidc_assume_role_arn] : [aws_iam_openid_connect_provider.this[0].arn]
     }
 
     condition {
