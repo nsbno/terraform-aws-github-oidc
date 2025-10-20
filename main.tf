@@ -30,6 +30,12 @@ locals {
     prod    = "Production"
     service = "Service"
   }
+
+  allowed_git_repos = length(var.github_repo_list_to_allow) == 0 ? [
+    "repo:${var.github_org}/*:environment:${local.environment_mapping[var.environment]}"
+    ] : [
+    for repo in var.github_repo_list_to_allow : "repo:${var.github_org}/${repo}:environment:${local.environment_mapping[var.environment]}" if repo != ""
+  ]
 }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -45,9 +51,7 @@ data "aws_iam_policy_document" "assume_role" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values = [
-        "repo:${var.github_org}/*:environment:${local.environment_mapping[var.environment]}"
-      ]
+      values   = local.allowed_git_repos
     }
   }
 }
