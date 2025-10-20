@@ -7,7 +7,7 @@ terraform {
 }
 
 resource "aws_iam_openid_connect_provider" "this" {
-  count = var.oidc_assume_role_arn != null ? 0 : 1
+  count = var.github_oidc_provider_arn != null ? 0 : 1
 
   url = "https://token.actions.githubusercontent.com"
 
@@ -35,11 +35,11 @@ locals {
 data "aws_iam_policy_document" "assume_role" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
-    effect = "Allow"
+    effect  = "Allow"
 
     principals {
-      type = "Federated"
-      identifiers = var.oidc_assume_role_arn != null ? [var.oidc_assume_role_arn] : [aws_iam_openid_connect_provider.this[0].arn]
+      type        = "Federated"
+      identifiers = var.github_oidc_provider_arn != null ? [var.github_oidc_provider_arn] : [aws_iam_openid_connect_provider.this[0].arn]
     }
 
     condition {
