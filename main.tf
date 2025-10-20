@@ -31,10 +31,10 @@ locals {
     service = "Service"
   }
 
-  allowed_git_repos = length(var.github_repo_list_to_allow) == 0 ? [
+  allowed_git_repos = length(var.github_repos_to_allow) == 0 ? [
     "repo:${var.github_org}/*:environment:${local.environment_mapping[var.environment]}"
     ] : [
-    for repo in var.github_repo_list_to_allow : "repo:${var.github_org}/${repo}:environment:${local.environment_mapping[var.environment]}" if repo != ""
+    for repo in var.github_repos_to_allow : "repo:${var.github_org}/${repo}:environment:${local.environment_mapping[var.environment]}"
   ]
 }
 
