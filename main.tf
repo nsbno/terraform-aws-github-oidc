@@ -24,8 +24,8 @@ resource "aws_iam_openid_connect_provider" "this" {
 
 locals {
   environment_mapping = {
-    dev     = "Development"
-    test    = "Test"
+    dev     = "Development",
+    test    = "Test",
     stage   = "Stage"
     prod    = "Production"
     service = "Service"
@@ -35,20 +35,19 @@ locals {
 data "aws_iam_policy_document" "assume_role" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
-    effect  = "Allow"
+    effect = "Allow"
 
     principals {
-      type        = "Federated"
+      type = "Federated"
       identifiers = var.oidc_assume_role_arn != null ? [var.oidc_assume_role_arn] : [aws_iam_openid_connect_provider.this[0].arn]
     }
 
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values = compact([
-        "repo:${var.github_org}/*:environment:${local.environment_mapping[var.environment]}",
-        var.environment != "prod" ? "repo:${var.github_org}/*:environment:Preview" : null
-      ])
+      values = [
+        "repo:${var.github_org}/*:environment:${local.environment_mapping[var.environment]}"
+      ]
     }
   }
 }
