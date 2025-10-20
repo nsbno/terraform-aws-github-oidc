@@ -17,5 +17,8 @@ module "oidc_role" {
   source = "github.com/nsbno/terraform-aws-github-oidc?ref=x.y.z"
 
   environment = var.environment
+
+  # To restrict which repositories can assume the role, provide a list here.
+  # github_repo_list_to_allow = ["infrademo-aws", "infrademo-service"]
 }
 -----
