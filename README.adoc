@@ -19,6 +19,6 @@ module "oidc_role" {
   environment = var.environment
 
   # To restrict which repositories can assume the role, provide a list here.
-  # github_repo_list_to_allow = ["infrademo-aws", "infrademo-service"]
+  # github_repos_to_allow = ["infrademo-aws", "infrademo-service"]
 }
 -----
