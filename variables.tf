@@ -4,6 +4,12 @@ variable "github_org" {
   default     = "nsbno"
 }
 
+variable "github_org_id" {
+  type        = string
+  description = "The immutable GitHub organization ID for github_org. Needed to match GitHub's immutable OIDC subject claim format (repo:org@org_id/repo@repo_id), which new/renamed repos use."
+  default     = "21105515"
+}
+
 variable "environment" {
   type        = string
   description = "The environment to deploy to. Valid values: dev, test, service, stage, prod"
