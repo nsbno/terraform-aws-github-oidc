@@ -31,11 +31,20 @@ locals {
     service = "Service"
   }
 
+  # GitHub now issues OIDC tokens with an immutable-ID subject claim
+  # (repo:org@org_id/repo@repo_id:...) for new and renamed repos, alongside
+  # the legacy name-based claim (repo:org/repo:...). We match both so trust
+  # doesn't depend on when a repo was created or last renamed. See:
+  # https://github.blog/changelog/2026-04-23-immutable-subject-claims-for-github-actions-oidc-tokens/
   allowed_git_repos = length(var.github_repos_to_allow) == 0 ? [
-    "repo:${var.github_org}/*:environment:${local.environment_mapping[var.environment]}"
-    ] : [
-    for repo in var.github_repos_to_allow : "repo:${var.github_org}/${repo}:environment:${local.environment_mapping[var.environment]}"
-  ]
+    "repo:${var.github_org}/*:environment:${local.environment_mapping[var.environment]}",
+    "repo:${var.github_org}@${var.github_org_id}/*:environment:${local.environment_mapping[var.environment]}",
+    ] : flatten([
+      for repo in var.github_repos_to_allow : [
+        "repo:${var.github_org}/${repo}:environment:${local.environment_mapping[var.environment]}",
+        "repo:${var.github_org}@${var.github_org_id}/${repo}@*:environment:${local.environment_mapping[var.environment]}",
+      ]
+  ])
 }
 
 data "aws_iam_policy_document" "assume_role" {
