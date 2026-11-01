@@ -36,3 +36,9 @@ variable "github_repos_to_allow" {
     error_message = "Repository names in github_repos_to_allow cannot be empty strings."
   }
 }
+
+variable "disable_guardrails" {
+  type        = bool
+  default     = false
+  description = "DANGEROUS OPERATION! Will allow GitHub Actions to run as unrestricted Administrator. Only enable temporarily, and with a very good reason"
+}
